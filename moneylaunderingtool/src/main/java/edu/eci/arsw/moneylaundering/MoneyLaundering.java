@@ -14,7 +14,8 @@ import java.util.stream.Stream;
 
 public class MoneyLaundering
 {
-    private TransactionAnalyzer transactionAnalyzer;
+    private static boolean running;
+	private TransactionAnalyzer transactionAnalyzer;
     private TransactionReader transactionReader;
     private int amountOfFilesTotal;
     private AtomicInteger amountOfFilesProcessed;
@@ -58,11 +59,22 @@ public class MoneyLaundering
         return csvFiles;
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args)    
     {
+    	
         MoneyLaundering moneyLaundering = new MoneyLaundering();
-        Thread processingThread = new Thread(() -> moneyLaundering.processTransactionData());
-        processingThread.start();
+        Thread processingThread1 = new Thread(() -> moneyLaundering.processTransactionData());
+        Thread processingThread2 = new Thread(() -> moneyLaundering.processTransactionData());
+        Thread processingThread3 = new Thread(() -> moneyLaundering.processTransactionData());
+        Thread processingThread4 = new Thread(() -> moneyLaundering.processTransactionData());
+        Thread processingThread5 = new Thread(() -> moneyLaundering.processTransactionData());
+        
+        processingThread1.start();
+        processingThread2.start();
+        processingThread3.start();
+        processingThread4.start();
+        processingThread5.start();
+        
         while(true)
         {
             Scanner scanner = new Scanner(System.in);
@@ -75,8 +87,11 @@ public class MoneyLaundering
             message = String.format(message, moneyLaundering.amountOfFilesProcessed.get(), moneyLaundering.amountOfFilesTotal, offendingAccounts.size(), suspectAccounts);
             System.out.println(message);
         }
-
+        
+        
     }
-
+    public static boolean isRunning(){
+        return running;
+    }
 
 }
